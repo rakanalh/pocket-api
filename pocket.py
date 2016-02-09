@@ -205,6 +205,9 @@ class Pocket:
         :return: A dict containing the request result
         :rtype: dict
         """
+        if not self._bulk_actions:
+            return
+
         return self._make_request(self._bulk_actions)
 
     def _add_action(self, action):
