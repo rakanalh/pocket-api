@@ -7,8 +7,8 @@ python:
   - 3.5
 
 install:
-  - pip install -r test_requirements.txt --use-mirrors
-  - pip install -q coverage pytest-cov pytest-flakes --use-mirrors
+  - pip install -r test_requirements.txt
+  - pip install -q coverage pytest-cov pytest-flakes
   - python setup.py -q install
 
 script:
