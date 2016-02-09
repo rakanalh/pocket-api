@@ -1,6 +1,8 @@
 Pocket-API
 =======================
 
+[![Build Status](https://travis-ci.org/rakanalh/pocket-api.svg?branch=master)](https://travis-ci.org/rakanalh/pocket-api)
+
 This package provides a wrapper class around [GetPocket](http://getpocket.com) V3 APIs.
 
 Installation
@@ -15,19 +17,19 @@ Usage
 
 
 	p = Pocket(
-		consumer_key='51178-761fe72fba8f7c8db74c6d56', 
+		consumer_key='51178-761fe72fba8f7c8db74c6d56',
 		access_token='f33bdcb3-2c7d-6dbe-6dbb-4f109d'
 	)
-	
+
 	# Fetch a list of articles
 	try:
     	print(p.retrieve(offset=0, count=10))
 	except PocketException as e:
     	print(e.message)
-    
+
     # Add an article
-    p.add('https://pymotw.com/3/asyncio/')	
-	
+    p.add('https://pymotw.com/3/asyncio/')
+
 	# Start a bulk operation and commit
 	p.archive(1186408060).favorite(1188103217).tags_add(
 		1168820736, 'Python'
