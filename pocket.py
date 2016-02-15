@@ -10,6 +10,12 @@ class Pocket:
     """
     api_url = 'https://getpocket.com/v3'
 
+    auth_error_codes = [
+        136, 138, 152,
+        182, 185, 158,
+        159
+    ]
+
     def __init__(self, consumer_key, access_token):
         self._consumer_key = consumer_key
         self._access_token = access_token
@@ -210,6 +216,32 @@ class Pocket:
 
         return self._make_request(self._bulk_actions)
 
+    def get_request_token(self, consumer_key, redirect_url):
+        response = requests.post(
+            self._get_url('oauth/request'),
+            json={
+                'consumer_key': consumer_key,
+                'redirect_uri': redirect_url
+            },
+            headers=self._get_headers()
+        )
+        if response.status_code == requests.codes.ok:
+            return response.json()['code']
+        return None
+
+    def get_access_token(self, consumer_key, request_token):
+        response = requests.post(
+            self._get_url('oauth/authorize'),
+            json={
+                'consumer_key': consumer_key,
+                'code': request_token
+            },
+            headers=self._get_headers()
+        )
+        if response.status_code == requests.codes.ok:
+            return response.json()['access_token']
+        return None
+
     def _add_action(self, action):
         """
         Register an action into bulk
@@ -298,16 +330,27 @@ class Pocket:
         """
         headers = response.headers
 
-        return PocketException(
+        limit_headers = []
+        if 'X-Limit-User-Limit' in headers:
+            limit_headers = [
+                headers['X-Limit-User-Limit'],
+                headers['X-Limit-User-Remaining'],
+                headers['X-Limit-User-Reset'],
+                headers['X-Limit-Key-Limit'],
+                headers['X-Limit-Key-Remaining'],
+                headers['X-Limit-Key-Reset']
+            ]
+
+        x_error_code = int(headers['X-Error-Code'])
+        exc = PocketException
+        if x_error_code in self.auth_error_codes:
+            exc = PocketAutException
+
+        return exc(
             response.status_code,
-            headers['X-Error-Code'],
+            x_error_code,
             headers['X-Error'],
-            headers['X-Limit-User-Limit'],
-            headers['X-Limit-User-Remaining'],
-            headers['X-Limit-User-Reset'],
-            headers['X-Limit-Key-Limit'],
-            headers['X-Limit-Key-Remaining'],
-            headers['X-Limit-Key-Reset']
+            *limit_headers
         )
 
 
@@ -323,3 +366,10 @@ class PocketException(Exception):
             if var_name == 'self':
                 continue
             setattr(self, var_name, value)
+
+
+class PocketAutException(PocketException):
+    """
+    A class that defines errors in authenticating against Pocket
+    """
+    pass
