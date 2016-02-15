@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pocket-api',
-    version='0.1.2',
+    version='0.1.3',
     author='Rakan Alhneiti',
     author_email='rakan.alhneiti@gmail.com',
 
