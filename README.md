@@ -18,12 +18,14 @@ Installation
 Usage
 --------
 
+First, you have to [Create your consumer key](https://getpocket.com/developer/apps/new) from getpocket's developer console. To get the access token, you have to authorize the app on your own account. There are tools on the web that can automate this for you such as [fxneumann's OneClickPocket](http://reader.fxneumann.de/plugins/oneclickpocket/auth.php)
+
 	from pocket import Pocket, PocketException
 
 
 	p = Pocket(
-		consumer_key='51178-761fe72fba8f7c8db74c6d56',
-		access_token='f33bdcb3-2c7d-6dbe-6dbb-4f109d'
+		consumer_key='<Your Consumer Key>',
+		access_token='<Your Access Token>'
 	)
 
 	# Fetch a list of articles
@@ -61,11 +63,11 @@ Bulk Actions
 * Add an article to bulktime_of_action
 
 		bulk_add(item_id, ref_id, tags, time_of_action, title, url)
-		
+
 * Archive article
-	
+
 	    archive(item_id, time_of_action)
-    
+
 * Reread an article
 
 	    readd(item_id, time_of_action)
