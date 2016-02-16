@@ -5,6 +5,11 @@ Pocket-API
 
 This package provides a wrapper class around [GetPocket](http://getpocket.com) V3 APIs.
 
+Pocket-CLI
+----------
+
+You can checkout [pocket-cli](https://www.github.com/rakanalh/pocket-cli), which is an application for reading / listing /managing your pocket articles from the terminal
+
 Installation
 ------------
 
@@ -38,19 +43,69 @@ Usage
 	).commit()
 
 
+Methods
+-------
+
+* Add an article
+
+		add(url, title, tags, tweet_id)
+
+* Retrieve articles
+
+	    retrieve(state, favorite, tag, contentType,
+                 sort, detailType, search, domain,
+                 since, count, offset)
+
 Bulk Actions
 ------------
-1. bulk_add
-2. archive
-3. readd
-4. favorite
-5. unfavorite
-6. delete
-7. tags_add
-8. tags_remove
-9. tags_replace
-10. tags_clear
-11. tag_rename
+* Add an article to bulktime_of_action
 
+		bulk_add(item_id, ref_id, tags, time_of_action, title, url)
+		
+* Archive article
+	
+	    archive(item_id, time_of_action)
+    
+* Reread an article
 
-The class also provides a ```reset``` method to restart bulk operations at anytime and a ```commit``` method to perform the bulk request to pocket's APIs.
+	    readd(item_id, time_of_action)
+
+* Mark article as favorite
+
+	    favorite(item_id, time_of_action)
+
+* Remove favorite mark from article
+
+	    unfavorite(item_id, time_of_action)
+
+* Delete an article from list
+
+	    delete(item_id, time_of_action)
+
+* Add tag to article
+
+	    tags_add(item_id, tags, time_of_action)
+
+* Remove tag from article
+
+	    tags_remove(item_id, tags, time_of_action)
+
+* Replace tags on article
+
+	    tags_replace(item_id, tags, time_of_action)
+
+* Clear tags from article
+
+	    tags_clear(item_id, time_of_action)
+
+* Rename a tag
+
+	    tag_rename(old_tag, new_tag, time_of_action)
+
+* Reset bulk actions (removes all previously registered actions)
+
+	    reset()
+
+* Send request of all bulk items to getpocket
+
+	    commit()
