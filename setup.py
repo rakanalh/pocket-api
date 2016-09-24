@@ -2,11 +2,14 @@ from setuptools import setup
 
 setup(
     name='pocket-api',
-    version='0.1.3',
+    version='0.1.5',
     author='Rakan Alhneiti',
     author_email='rakan.alhneiti@gmail.com',
 
-    py_modules=['pocket'],
+    # Packages
+    packages=[
+        'pocket',
+    ],
 
     # Details
     url='https://github.com/rakanalh/pocket-api',
