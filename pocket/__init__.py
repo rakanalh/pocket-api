@@ -229,7 +229,7 @@ class Pocket:
             return response.json()['code']
         return None
 
-    def get_access_token(self, request_token):
+    def get_user_profile(self, request_token):
         response = requests.post(
             self._get_url('oauth/authorize'),
             json={
@@ -239,8 +239,14 @@ class Pocket:
             headers=self._get_headers()
         )
         if response.status_code == requests.codes.ok:
-            return response.json()['access_token']
+            return response.json()
         return None
+
+    def get_access_token(self, request_token):
+        user_profile = self.get_user_profile(request_token)
+        if not user_profile:
+            return
+        return user_profile['access_token']
 
     def _add_action(self, action):
         """
