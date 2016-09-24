@@ -12,8 +12,10 @@ def setup_function(function):
     global _pocket
     _pocket = Pocket(_consumer_key, _access_token)
 
+
 def success_request_callback(request):
     return 200, {}, request.body
+
 
 def failed_request_callback(request):
     return 400, {
@@ -26,6 +28,7 @@ def failed_request_callback(request):
         'X-Limit-Key-Remaining': '500',
         'X-Limit-Key-Reset': '1000'
     }, request.body
+
 
 def has_credentials(response):
     assert response['consumer_key'] == _consumer_key
@@ -137,6 +140,7 @@ def test_favorite():
     assert response['actions'][1]['action'] == 'unfavorite'
     assert response['actions'][1]['item_id'] == 123
 
+
 @responses.activate
 def test_tags():
     responses.add_callback(
@@ -145,22 +149,22 @@ def test_tags():
         content_type='application/json',
     )
 
-    _pocket.tags_add(123, [1,2,3])
-    _pocket.tags_remove(123, [2,3])
-    _pocket.tags_replace(123, [4,5,6])
+    _pocket.tags_add(123, [1, 2, 3])
+    _pocket.tags_remove(123, [2, 3])
+    _pocket.tags_replace(123, [4, 5, 6])
     _pocket.tag_rename('old_tag', 'new_tag')
     response = _pocket.commit()
 
     assert len(responses.calls) == 1
     assert response['actions'][0]['action'] == 'tags_add'
     assert response['actions'][0]['item_id'] == 123
-    assert response['actions'][0]['tags'] == [1,2,3]
+    assert response['actions'][0]['tags'] == [1, 2, 3]
     assert response['actions'][1]['action'] == 'tags_remove'
     assert response['actions'][1]['item_id'] == 123
-    assert response['actions'][1]['tags'] == [2,3]
+    assert response['actions'][1]['tags'] == [2, 3]
     assert response['actions'][2]['action'] == 'tags_replace'
     assert response['actions'][2]['item_id'] == 123
-    assert response['actions'][2]['tags'] == [4,5,6]
+    assert response['actions'][2]['tags'] == [4, 5, 6]
     assert response['actions'][3]['action'] == 'tag_rename'
     assert response['actions'][3]['old_tag'] == 'old_tag'
     assert response['actions'][3]['new_tag'] == 'new_tag'
