@@ -16,7 +16,7 @@ class Pocket:
         159
     ]
 
-    def __init__(self, consumer_key, access_token):
+    def __init__(self, consumer_key, access_token=None):
         self._consumer_key = consumer_key
         self._access_token = access_token
 
@@ -216,11 +216,11 @@ class Pocket:
 
         return self._make_request(self._bulk_actions)
 
-    def get_request_token(self, consumer_key, redirect_url):
+    def get_request_token(self, redirect_url):
         response = requests.post(
             self._get_url('oauth/request'),
             json={
-                'consumer_key': consumer_key,
+                'consumer_key': self._consumer_key,
                 'redirect_uri': redirect_url
             },
             headers=self._get_headers()
@@ -229,11 +229,11 @@ class Pocket:
             return response.json()['code']
         return None
 
-    def get_access_token(self, consumer_key, request_token):
+    def get_access_token(self, request_token):
         response = requests.post(
             self._get_url('oauth/authorize'),
             json={
-                'consumer_key': consumer_key,
+                'consumer_key': self._consumer_key,
                 'code': request_token
             },
             headers=self._get_headers()
